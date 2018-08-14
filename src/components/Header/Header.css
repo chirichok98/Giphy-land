@@ -1,0 +1,12 @@
+.site-logo {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo-text {
+  text-transform: uppercase;
+  display: inline-block;
+  font-size: 3rem;
+}
