@@ -32,8 +32,8 @@ ul li a {
 }
 
 ul li a.active {
-  background: #f6f6f6;
+  color: #10E6CC;
 }
 ul li a:not(.active):hover {
-  background: #10E6CC;
+  color: #000;
 }
