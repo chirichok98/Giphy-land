@@ -1,15 +1,16 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
-import Search from '../../components/Search/index';
+import Search from './components/Search/index';
+import LoadMore from './components/LoadMore/index';
 import List from '../../components/List/index';
-import LoadMore from '../../components/LoadMore/index';
 import { urls, API_KEY } from '../../assets/configs/giphyApi';
 import { defaultPaging } from '../../assets/configs/paging';
 
 class Popular extends Component {
   state = {
     items: [],
+    query: '',
     loading: {
       isPending: false,
       isError: false,
@@ -18,31 +19,32 @@ class Popular extends Component {
     paging: defaultPaging
   }
 
-  componentWillMount = () => {
+  componentDidMount = () => {
     this.loadItems();
   }
 
   onSearchChange = ({ query }) => {
+    this.setState(() => ({ query }));
     this.resetPaging();
-    this.loadItems(query);
+    this.loadItems(true);
   }
 
-  loadItems = (query) => {
+  loadItems = (clearItems) => {
     this.setPending();
-    if (!query) {
-      this.getPopular();
+    if (!this.state.query) {
+      this.getPopular(clearItems);
       return;
     }
-    this.getBySearch(query);
+    this.getBySearch(clearItems);
   }
 
   resetPaging = () => {
     this.setState(() => ({ paging: defaultPaging }));
   }
 
-  setItems = (items) => {
-    this.setState(() => ({
-      items,
+  setItems = (items, clearItems) => {
+    this.setState((prevState) => ({
+      items: clearItems ? [].concat(items) : prevState.items.concat(items),
       loading: {
         isPending: false,
         isLoaded: true
@@ -70,29 +72,36 @@ class Popular extends Component {
     }));
   }
 
-  getPopular = () => {
+  getPopular = (clearItems) => {
     axios.get(urls.popular, {
       params: {
         api_key: API_KEY,
         ...this.state.paging
       }
-    }).then((response) => this.setItems(response.data.data))
+    }).then((response) => this.setItems(response.data.data, clearItems))
       .catch(() => this.setError());
   }
 
-  getBySearch = (query) => {
+  getBySearch = (clearItems) => {
     axios.get(urls.search, {
       params: {
         api_key: API_KEY,
-        q: query,
+        q: this.state.query,
         ...this.state.paging
       }
-    }).then((response) => this.setItems(response.data.data))
+    }).then((response) => this.setItems(response.data.data, clearItems))
       .catch(() => this.setError());
   }
 
   loadMore = () => {
-    
+    this.setState((prevState) => {
+      const newPaging = {
+        ...prevState.paging,
+        offset: prevState.paging.offset + prevState.paging.limit
+      };
+      return { paging: newPaging };
+    })
+    this.loadItems(this.state.query);
   }
 
   render() {
