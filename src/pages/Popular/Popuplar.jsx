@@ -3,7 +3,7 @@ import axios from 'axios';
 
 import Search from './components/Search/index';
 import LoadMore from './components/LoadMore/index';
-import List from '../../components/List/index';
+import GifItemList from '../../components/GifItemList/index';
 import { urls, API_KEY } from '../../assets/configs/giphyApi';
 import { defaultPaging } from '../../assets/configs/paging';
 
@@ -108,7 +108,7 @@ class Popular extends Component {
     return (
       <div>
         <Search searchChange={this.onSearchChange} />
-        <List items={this.state.items} />
+        <GifItemList items={this.state.items} />
         <LoadMore loadMore={this.loadMore} />
       </div >
     );

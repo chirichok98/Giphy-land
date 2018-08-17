@@ -13,12 +13,12 @@ const Navigator = () => {
         <li>
           <NavLink
             activeClassName='active'
-            exact to="/">Trending Now</NavLink>
+            exact to='/'>Trending Now</NavLink>
         </li>
         <li>
           <NavLink
             activeClassName='active'
-            to="/random">Random</NavLink>
+            to='/random'>Random</NavLink>
         </li>
       </ul>
     </Router>
