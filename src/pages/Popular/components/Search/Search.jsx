@@ -3,14 +3,14 @@ import React, { PureComponent } from 'react';
 import './Search.css';
 
 class Search extends PureComponent {
-  
+
   searchChange = (e) => {
     e.preventDefault();
     this.props.searchChange({ query: e.target.value });
   }
 
-  render = () =>
-    (<form className="search-container" onSubmit={this.searchChange}>
+  render = () => (
+    <form className="search-container" onSubmit={this.searchChange}>
       <input
         className="search-box"
         placeholder="Search all the GIFs"
@@ -21,7 +21,8 @@ class Search extends PureComponent {
         type="submit"
         value="Find"
       />
-    </form>);
+    </form>
+  );
 }
 
 export default Search;
