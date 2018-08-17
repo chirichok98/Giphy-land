@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 
 import './Search.css';
 
@@ -23,6 +24,10 @@ class Search extends PureComponent {
       />
     </form>
   );
+}
+
+Search.propTypes = {
+  searchChange: PropTypes.func.isRequired
 }
 
 export default Search;
