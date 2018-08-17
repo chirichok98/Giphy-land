@@ -4,7 +4,7 @@ import axios from 'axios';
 import Search from './components/Search/index';
 import LoadMore from './components/LoadMore/index';
 import GifItemList from '../../components/GifItemList/index';
-import { urls, API_KEY } from '../../assets/configs/giphyApi';
+import { getPopularGifs, getGifsBySearch } from '../../api/giphy';
 import { defaultPaging } from '../../assets/configs/paging';
 
 class Popular extends Component {
@@ -73,22 +73,15 @@ class Popular extends Component {
   }
 
   getPopular = (clearItems) => {
-    axios.get(urls.popular, {
-      params: {
-        api_key: API_KEY,
-        ...this.state.paging
-      }
-    }).then((response) => this.setItems(response.data.data, clearItems))
+    getPopularGifs({ ...this.state.paging })
+      .then((response) => this.setItems(response.data.data, clearItems))
       .catch(() => this.setError());
   }
 
   getBySearch = (clearItems) => {
-    axios.get(urls.search, {
-      params: {
-        api_key: API_KEY,
-        q: this.state.query,
-        ...this.state.paging
-      }
+    getGifsBySearch({
+      q: this.state.query,
+      ...this.state.paging
     }).then((response) => this.setItems(response.data.data, clearItems))
       .catch(() => this.setError());
   }
