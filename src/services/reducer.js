@@ -1,10 +1,10 @@
 import { combineReducers } from "redux";
 
-import popularReducer from "../scenes/Popular/services/reducer";
+import homeReducer from "../scenes/Home/services/reducer";
 import randomReducer from "../scenes/Random/services/reducer";
 
 const rootReducer = combineReducers({
-  popular: popularReducer,
+  home: homeReducer,
   random: randomReducer
 });
 

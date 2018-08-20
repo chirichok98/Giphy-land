@@ -1,15 +1,15 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 
-import Search from "./components/Search/index";
-import LoadMore from "./components/LoadMore/index";
-import GifItemList from "../../components/GifItemList/index";
-import { getPopularGifs, getGifsBySearch } from "../../services/api/giphy";
-import { defaultPaging } from "../../configs/paging";
+import Search from './components/Search/index';
+import LoadMore from './components/LoadMore/index';
+import GifItemList from '../../components/GifItemList/index';
+import { getHomeGifs, getGifsBySearch } from '../../services/api/giphy';
+import { defaultPaging } from '../../configs/paging';
 
-class Popular extends Component {
+class Home extends Component {
   state = {
     items: [],
-    query: "",
+    query: '',
     loading: {
       isPending: false,
       isError: false,
@@ -31,7 +31,7 @@ class Popular extends Component {
   loadItems = clearItems => {
     this.setPending();
     if (!this.state.query) {
-      this.getPopular(clearItems);
+      this.getHome(clearItems);
       return;
     }
     this.getBySearch(clearItems);
@@ -71,8 +71,8 @@ class Popular extends Component {
     }));
   };
 
-  getPopular = clearItems => {
-    getPopularGifs({ ...this.state.paging })
+  getHome = clearItems => {
+    getHomeGifs({ ...this.state.paging })
       .then(response => this.setItems(response.data.data, clearItems))
       .catch(() => this.setError());
   };
@@ -108,4 +108,4 @@ class Popular extends Component {
   }
 }
 
-export default Popular;
+export default Home;

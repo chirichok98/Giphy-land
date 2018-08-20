@@ -1,4 +1,4 @@
-export default function popularReducer(state = 0, action) {
+export default function homeReducer(state = 0, action) {
   switch (action.type) {
     case "INCREMENT":
       return state + 1;

@@ -1,0 +1,4 @@
+export const LOAD_POPULAR_GIFS = 'LOAD_POPULAR_GIFS';
+export const LOAD_MORE_GIFS = 'LOAD_MORE_GIFS';
+export const LOAD_BY_QUERY_GIFS = 'LOAD_BY_QUERY_GIFS';
+export const LOAD_SUCCESS = 'LOAD_SUCCESS';
