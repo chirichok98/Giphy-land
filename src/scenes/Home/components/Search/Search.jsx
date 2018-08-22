@@ -5,29 +5,33 @@ import './Search.css';
 
 class Search extends PureComponent {
 
-  searchChange = (e) => {
-    e.preventDefault();
-    this.props.searchChange({ query: e.target.value });
-  }
+	state = {
+		query: '',
+	};
 
-  render = () => (
-    <form className="search-container" onSubmit={this.searchChange}>
-      <input
-        className="search-box"
-        placeholder="Search all the GIFs"
-        onChange={this.handleInputChange}
-      />
-      <input
-        className="search-button"
-        type="submit"
-        value="Find"
-      />
-    </form>
-  );
+	searchChange = (e) => {
+		e.preventDefault();
+		this.props.searchChange({ query: this.state.query });
+	}
+
+	render = () => (
+		<form className="search-container" onSubmit={this.searchChange}>
+			<input
+				className="search-box"
+				placeholder="Search all the GIFs"
+				onChange={(e) => this.state.query = e.target.value}
+			/>
+			<input
+				className="search-button"
+				type="submit"
+				value="Find"
+			/>
+		</form>
+	);
 }
 
 Search.propTypes = {
-  searchChange: PropTypes.func.isRequired
+	searchChange: PropTypes.func.isRequired
 }
 
 export default Search;

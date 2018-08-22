@@ -1,111 +1,51 @@
 import React, { Component } from 'react';
+import { connect } from "react-redux";
 
+import actions from './services/actions';
 import Search from './components/Search/index';
 import LoadMore from './components/LoadMore/index';
 import GifItemList from '../../components/GifItemList/index';
-import { getHomeGifs, getGifsBySearch } from '../../services/api/giphy';
-import { defaultPaging } from '../../configs/paging';
 
-class Home extends Component {
-  state = {
-    items: [],
-    query: '',
-    loading: {
-      isPending: false,
-      isError: false,
-      isLoaded: false
-    },
-    paging: defaultPaging
-  };
+class HomeScene extends Component {
 
-  componentDidMount = () => {
-    this.loadItems();
-  };
+	componentDidMount = () => {
+		this.props.loadItems(this.props.paging);
+	};
+	
+	componentWillUnmount() {
+		this.props.cancelLoadItems();
+	}
 
-  onSearchChange = ({ query }) => {
-    this.setState(() => ({ query }));
-    this.resetPaging();
-    this.loadItems(true);
-  };
-
-  loadItems = clearItems => {
-    this.setPending();
-    if (!this.state.query) {
-      this.getHome(clearItems);
-      return;
-    }
-    this.getBySearch(clearItems);
-  };
-
-  resetPaging = () => {
-    this.setState(() => ({ paging: defaultPaging }));
-  };
-
-  setItems = (items, clearItems) => {
-    this.setState(prevState => ({
-      items: clearItems ? [].concat(items) : prevState.items.concat(items),
-      loading: {
-        isPending: false,
-        isLoaded: true
-      }
-    }));
-  };
-
-  setPending = () => {
-    this.setState(() => ({
-      loading: {
-        isPending: true,
-        isError: false,
-        isLoaded: false
-      }
-    }));
-  };
-
-  setError = () => {
-    this.setState(() => ({
-      items: [],
-      loading: {
-        isPending: false,
-        isError: true
-      }
-    }));
-  };
-
-  getHome = clearItems => {
-    getHomeGifs({ ...this.state.paging })
-      .then(response => this.setItems(response.data.data, clearItems))
-      .catch(() => this.setError());
-  };
-
-  getBySearch = clearItems => {
-    getGifsBySearch({
-      q: this.state.query,
-      ...this.state.paging
-    })
-      .then(response => this.setItems(response.data.data, clearItems))
-      .catch(() => this.setError());
-  };
-
-  loadMore = () => {
-    this.setState(prevState => {
-      const newPaging = {
-        ...prevState.paging,
-        offset: prevState.paging.offset + prevState.paging.limit
-      };
-      return { paging: newPaging };
-    });
-    this.loadItems(this.state.query);
-  };
-
-  render() {
-    return (
-      <div>
-        <Search searchChange={this.onSearchChange} />
-        <GifItemList items={this.state.items} />
-        <LoadMore loadMore={this.loadMore} />
-      </div>
-    );
-  }
+	render() {
+		return (
+			<div>
+				<Search searchChange={this.props.onQueryChange} />
+				<GifItemList items={this.props.items} />
+				<LoadMore loadMore={this.props.loadMore} />
+			</div>
+		);
+	}
 }
 
-export default Home;
+const mapStateToProps = (state) => {
+	const { items, loading, error, paging, query } = state.home;
+
+	return {
+		items,
+		loading,
+		error,
+		paging,
+		query,
+	};
+};
+
+const mapDispatchToProps = (dispatch) => {
+	return {
+		loadItems: (paging) => dispatch(actions.loadItems(paging)),
+		cancelLoadItems: () => dispatch(actions.cancelLoadItem()),
+		loadMore: () => dispatch(actions.loadMoreItems()),
+		onQueryChange: ({ query }) => dispatch(actions.changeQuery(query))
+	};
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(HomeScene);
